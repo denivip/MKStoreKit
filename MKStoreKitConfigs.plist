@@ -4,22 +4,13 @@
 <dict>
 	<key>Consumables</key>
 	<dict>
-		<key>com.steinlogic.iap6test.consumable</key>
+		<key>ru.denivip.photochat.mailings_to_all</key>
 		<dict>
 			<key>Count</key>
-			<integer>500</integer>
+			<real>30</real>
 			<key>Name</key>
-			<string>EggBasket</string>
+			<string>Broadcast</string>
 		</dict>
-	</dict>
-	<key>Non-Consumables</key>
-	<array>
-		<string>com.steinlogic.iap6test.nonconsumable</string>
-	</array>
-	<key>Subscriptions</key>
-	<dict>
-		<key>com.steinlogic.iap6test.autorenew</key>
-		<integer>7</integer>
 	</dict>
 </dict>
 </plist>

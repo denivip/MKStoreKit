@@ -90,7 +90,7 @@ static VerificationController *singleton;
     
 #warning Check for the correct itms verify receipt URL
     // Use ITMS_SANDBOX_VERIFY_RECEIPT_URL while testing against the sandbox.
-    NSString *serverURL = ITMS_PROD_VERIFY_RECEIPT_URL;
+    NSString *serverURL = ITMS_SANDBOX_VERIFY_RECEIPT_URL;
     
     // Create the POST request to the server.
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:serverURL]];
@@ -334,7 +334,7 @@ static VerificationController *singleton;
 #endif
     } else {
         // Pre iOS 6 
-        NSString *localIdentifier           = [UIDevice currentDevice].uniqueIdentifier;
+        NSString *localIdentifier           = [[UIDevice currentDevice].identifierForVendor UUIDString];
         NSString *purchaseInfoUniqueId      = [purchaseInfoFromTransaction objectForKey:@"unique-identifier"];
 
         
