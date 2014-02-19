@@ -329,27 +329,9 @@ static MKStoreManager* _sharedStoreManager;
 
 - (BOOL) isSubscriptionActive:(NSString*) featureId
 {
-  MKSKSubscriptionProduct *subscriptionProduct = [self.subscriptionProducts objectForKey:featureId];
-  if(!subscriptionProduct.receipt) return NO;
-  
-  id jsonObject = [NSJSONSerialization JSONObjectWithData:subscriptionProduct.receipt options:NSJSONReadingAllowFragments error:nil];
-  NSData *receiptData = [NSData dataFromBase64String:[jsonObject objectForKey:@"latest_receipt"]];
-  
-  NSPropertyListFormat plistFormat;
-  NSDictionary *payloadDict = [NSPropertyListSerialization propertyListWithData:receiptData
-                                                                        options:NSPropertyListImmutable
-                                                                         format:&plistFormat
-                                                                          error:nil];
-  
-  receiptData = [NSData dataFromBase64String:[payloadDict objectForKey:@"purchase-info"]];
-  
-  NSDictionary *receiptDict = [NSPropertyListSerialization propertyListWithData:receiptData
-                                                                        options:NSPropertyListImmutable
-                                                                         format:&plistFormat
-                                                                          error:nil];
-  
-  NSTimeInterval expiresDate = [[receiptDict objectForKey:@"expires-date"] doubleValue]/1000.0f;
-  return expiresDate > [[NSDate date] timeIntervalSince1970];
+    MKSKSubscriptionProduct *subscriptionProduct = [self.subscriptionProducts objectForKey:featureId];
+    return [subscriptionProduct isSubscriptionActive];
+    
 }
 
 // Call this function to populate your UI
@@ -713,23 +695,23 @@ static MKStoreManager* _sharedStoreManager;
 		{
 			case SKPaymentTransactionStatePurchased:
 				
-        [self completeTransaction:transaction];
+                [self completeTransaction:transaction];
 				
-        break;
+                break;
 				
-      case SKPaymentTransactionStateFailed:
+            case SKPaymentTransactionStateFailed:
 				
-        [self failedTransaction:transaction];
+                [self failedTransaction:transaction];
 				
-        break;
+                break;
 				
-      case SKPaymentTransactionStateRestored:
+            case SKPaymentTransactionStateRestored:
 				
-        [self restoreTransaction:transaction];
+                [self restoreTransaction:transaction];
 				
-      default:
+            default:
 				
-        break;
+                break;
 		}
 	}
 }
