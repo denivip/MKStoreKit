@@ -262,7 +262,7 @@ static VerificationController *singleton;
     {
         return NO;
     }
-    int verifyReceiptStatus = [status integerValue];
+    NSInteger verifyReceiptStatus = [status integerValue];
     // 21006 = This receipt is valid but the subscription has expired.
     if (0 != verifyReceiptStatus && 21006 != verifyReceiptStatus)
     {
@@ -272,7 +272,6 @@ static VerificationController *singleton;
     // The receipt is valid, so checked the receipt specifics now.
     
     NSDictionary *verifiedReceiptReceiptDictionary  = [verifiedReceiptDictionary objectForKey:@"receipt"];
-    NSString *verifiedReceiptUniqueIdentifier       = [verifiedReceiptReceiptDictionary objectForKey:@"unique_identifier"];
     NSString *transactionIdFromVerifiedReceipt      = [verifiedReceiptReceiptDictionary objectForKey:@"transaction_id"];
     
     // Get the transaction's receipt data from the transactionsReceiptStorageDictionary
@@ -648,7 +647,7 @@ BOOL checkReceiptSecurity(NSString *purchase_info_string, NSString *signature_st
     
     CC_SHA1_Init(&sha1_ctx);
     CC_SHA1_Update(&sha1_ctx, &signature_blob_ptr->version, sizeof(signature_blob_ptr->version));
-    CC_SHA1_Update(&sha1_ctx, purchase_info_bytes, purchase_info_length);
+    CC_SHA1_Update(&sha1_ctx, purchase_info_bytes, (CC_LONG)purchase_info_length);
     CC_SHA1_Final(to_be_verified_data, &sha1_ctx);
     
     SecKeyRef receipt_signing_key = SecTrustCopyPublicKey(trust);
