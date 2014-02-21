@@ -39,6 +39,8 @@
 #import "MKSKSubscriptionProduct.h"
 #import "MKSKProduct.h"
 #import "NSData+MKBase64.h"
+#import "DVTogetherRequestOperationManager.h"
+
 #if ! __has_feature(objc_arc)
 #error MKStoreKit is ARC only. Either turn on ARC for the project or use -fobjc-arc flag
 #endif
@@ -594,19 +596,29 @@ static MKStoreManager* _sharedStoreManager;
     // so this can be safely ignored.
     
     subscriptionProduct.receipt = receiptData;
-    [subscriptionProduct verifyReceiptOnComplete:^(NSNumber* isActive)
-     {
-       [[NSNotificationCenter defaultCenter] postNotificationName:kSubscriptionsPurchasedNotification
-                                                           object:productIdentifier];
-       
-       [MKStoreManager setObject:receiptData forKey:productIdentifier];
-       if(self.onTransactionCompleted)
-         self.onTransactionCompleted(productIdentifier, receiptData, hostedContent);
-     }
-                                         onError:^(NSError* error)
-     {
-       NSLog(@"%@", [error description]);
-     }];
+      [[DVTogetherRequestOperationManager sharedManager] verifyReceipt:receiptData withCompletion:^(BOOL success, NSError *error) {
+          if (success) {
+              [[NSNotificationCenter defaultCenter] postNotificationName:kSubscriptionsPurchasedNotification
+                                                                  object:productIdentifier];
+              
+              [MKStoreManager setObject:receiptData forKey:productIdentifier];
+              if(self.onTransactionCompleted)
+                  self.onTransactionCompleted(productIdentifier, receiptData, hostedContent);
+          }
+      }];
+//    [subscriptionProduct verifyReceiptOnComplete:^(NSNumber* isActive)
+//     {
+//       [[NSNotificationCenter defaultCenter] postNotificationName:kSubscriptionsPurchasedNotification
+//                                                           object:productIdentifier];
+//       
+//       [MKStoreManager setObject:receiptData forKey:productIdentifier];
+//       if(self.onTransactionCompleted)
+//         self.onTransactionCompleted(productIdentifier, receiptData, hostedContent);
+//     }
+//                                         onError:^(NSError* error)
+//     {
+//       NSLog(@"%@", [error description]);
+//     }];
   }
   else
   {
