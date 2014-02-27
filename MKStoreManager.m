@@ -53,7 +53,7 @@
 @interface MKStoreManager () //private methods and properties
 
 @property (nonatomic, copy) void (^onTransactionCancelled)();
-@property (nonatomic, copy) void (^onTransactionCompleted)(NSString *productId, NSData* receiptData, NSArray* downloads);
+@property (nonatomic, copy) void (^onTransactionCompleted)(NSString *productId, NSData* receiptData, NSArray* downloads, NSString *transactionID);
 
 @property (nonatomic, copy) void (^onRestoreFailed)(NSError* error);
 @property (nonatomic, copy) void (^onRestoreCompleted)();
@@ -415,7 +415,7 @@ static MKStoreManager* _sharedStoreManager;
 }
 
 - (void) buyFeature:(NSString*) featureId
-         onComplete:(void (^)(NSString*, NSData*, NSArray*)) completionBlock
+         onComplete:(void (^)(NSString*, NSData*, NSArray*, NSString *)) completionBlock
         onCancelled:(void (^)(void)) cancelBlock
 {
   self.onTransactionCompleted = completionBlock;
@@ -430,7 +430,7 @@ static MKStoreManager* _sharedStoreManager;
                         message:NSLocalizedString(@"You can use this feature for reviewing the app.", @"")];
        
        if(self.onTransactionCompleted)
-         self.onTransactionCompleted(featureId, nil, nil);
+         self.onTransactionCompleted(featureId, nil, nil, nil);
      }
      else
      {
@@ -574,7 +574,8 @@ static MKStoreManager* _sharedStoreManager;
 #endif
         [self provideContent:download.transaction.payment.productIdentifier
                   forReceipt:download.transaction.transactionReceipt
-               hostedContent:[NSArray arrayWithObject:download]];
+               hostedContent:[NSArray arrayWithObject:download]
+               transactionID:download.transaction.transactionIdentifier];
         
         [[SKPaymentQueue defaultQueue] finishTransaction:download.transaction];
         break;
@@ -588,6 +589,7 @@ static MKStoreManager* _sharedStoreManager;
 -(void) provideContent: (NSString*) productIdentifier
             forReceipt:(NSData*) receiptData
          hostedContent:(NSArray*) hostedContent
+         transactionID:(NSString *)transactionID
 {
   MKSKSubscriptionProduct *subscriptionProduct = [self.subscriptionProducts objectForKey:productIdentifier];
   if(subscriptionProduct)
@@ -603,7 +605,7 @@ static MKStoreManager* _sharedStoreManager;
               
               [MKStoreManager setObject:receiptData forKey:productIdentifier];
               if(self.onTransactionCompleted)
-                  self.onTransactionCompleted(productIdentifier, receiptData, hostedContent);
+                  self.onTransactionCompleted(productIdentifier, receiptData, hostedContent, transactionID);
           }
       }];
 //    [subscriptionProduct verifyReceiptOnComplete:^(NSNumber* isActive)
@@ -650,7 +652,7 @@ static MKStoreManager* _sharedStoreManager;
        {
          [self rememberPurchaseOfProduct:productIdentifier withReceipt:receiptData];
          if(self.onTransactionCompleted)
-           self.onTransactionCompleted(productIdentifier, receiptData, hostedContent);
+           self.onTransactionCompleted(productIdentifier, receiptData, hostedContent, transactionID);
        }
                                    onError:^(NSError* error)
        {
@@ -668,7 +670,7 @@ static MKStoreManager* _sharedStoreManager;
     {
       [self rememberPurchaseOfProduct:productIdentifier withReceipt:receiptData];
       if(self.onTransactionCompleted)
-        self.onTransactionCompleted(productIdentifier, receiptData, hostedContent);
+        self.onTransactionCompleted(productIdentifier, receiptData, hostedContent, transactionID);
     }
   }
 }
@@ -776,7 +778,8 @@ static MKStoreManager* _sharedStoreManager;
   
   [self provideContent:transaction.payment.productIdentifier
             forReceipt:transaction.transactionReceipt
-         hostedContent:downloads];
+         hostedContent:downloads
+         transactionID:transaction.transactionIdentifier];
 #elif TARGET_OS_MAC
   [self provideContent:transaction.payment.productIdentifier
             forReceipt:nil
@@ -808,11 +811,13 @@ static MKStoreManager* _sharedStoreManager;
   
   [self provideContent: transaction.originalTransaction.payment.productIdentifier
             forReceipt:transaction.transactionReceipt
-         hostedContent:downloads];
+         hostedContent:downloads
+         transactionID:transaction.transactionIdentifier];
 #elif TARGET_OS_MAC
   [self provideContent: transaction.originalTransaction.payment.productIdentifier
             forReceipt:nil
-         hostedContent:nil];
+         hostedContent:nil
+         transactionID:nil];
 #endif
 	
   [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
