@@ -698,8 +698,7 @@ static MKStoreManager* _sharedStoreManager;
   [MKStoreManager setObject:receiptData forKey:[NSString stringWithFormat:@"%@-receipt", productIdentifier]];
 }
 
-#pragma -
-#pragma mark Store Observer
+#pragma mark - Store Observer
 
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
 {
