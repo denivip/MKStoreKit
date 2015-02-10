@@ -12,5 +12,10 @@
 			<string>Broadcasts</string>
 		</dict>
 	</dict>
+    <key>Non-Consumables</key>
+    <dict>
+        <key>ru.denivip.photochat.content</key>
+        <string></string>
+    </dict>
 </dict>
 </plist>
