@@ -234,7 +234,7 @@ static MKStoreManager* _sharedStoreManager;
 {
   NSMutableArray *productsArray = [NSMutableArray array];
   NSArray *consumables = [[[MKStoreManager storeKitItems] objectForKey:@"Consumables"] allKeys];
-  NSArray *nonConsumables = [[[MKStoreManager storeKitItems] objectForKey:@"Non-Consumables"] allKeys];
+  NSArray *nonConsumables = [[MKStoreManager storeKitItems] objectForKey:@"Non-Consumables"];
   NSArray *subscriptions = [[[MKStoreManager storeKitItems] objectForKey:@"Subscriptions"] allKeys];
   
     [productsArray addObjectsFromArray:consumables];
@@ -251,7 +251,7 @@ static MKStoreManager* _sharedStoreManager;
   NSMutableArray *productsArray = [NSMutableArray array];
   NSArray *consumables = [[[self storeKitItems] objectForKey:@"Consumables"] allKeys];
   NSArray *consumableNames = [self allConsumableNames];
-  NSArray *nonConsumables = [[[self storeKitItems] objectForKey:@"Non-Consumables"] allKeys];
+  NSArray *nonConsumables = [[self storeKitItems] objectForKey:@"Non-Consumables"];
   NSArray *subscriptions = [[[self storeKitItems] objectForKey:@"Subscriptions"] allKeys];
 
     [productsArray addObjectsFromArray:consumables];

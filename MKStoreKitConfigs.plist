@@ -13,9 +13,8 @@
 		</dict>
 	</dict>
     <key>Non-Consumables</key>
-    <dict>
-        <key>ru.denivip.photochat.content</key>
-        <string></string>
-    </dict>
+    <array>
+        <string>ru.denivip.photochat.content</string>
+    </array>
 </dict>
 </plist>
