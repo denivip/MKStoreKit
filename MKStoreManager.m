@@ -234,13 +234,13 @@ static MKStoreManager* _sharedStoreManager;
 {
   NSMutableArray *productsArray = [NSMutableArray array];
   NSArray *consumables = [[[MKStoreManager storeKitItems] objectForKey:@"Consumables"] allKeys];
-  NSArray *nonConsumables = [[MKStoreManager storeKitItems] objectForKey:@"Non-Consumables"];
+  NSArray *nonConsumables = [[[MKStoreManager storeKitItems] objectForKey:@"Non-Consumables"] allKeys];
   NSArray *subscriptions = [[[MKStoreManager storeKitItems] objectForKey:@"Subscriptions"] allKeys];
   
-  [productsArray addObjectsFromArray:consumables];
-  [productsArray addObjectsFromArray:nonConsumables];
-  [productsArray addObjectsFromArray:subscriptions];
-  
+    [productsArray addObjectsFromArray:consumables];
+    [productsArray addObjectsFromArray:nonConsumables];
+    [productsArray addObjectsFromArray:subscriptions];
+
 	self.productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[NSSet setWithArray:productsArray]];
 	self.productsRequest.delegate = self;
 	[self.productsRequest start];
@@ -251,14 +251,14 @@ static MKStoreManager* _sharedStoreManager;
   NSMutableArray *productsArray = [NSMutableArray array];
   NSArray *consumables = [[[self storeKitItems] objectForKey:@"Consumables"] allKeys];
   NSArray *consumableNames = [self allConsumableNames];
-  NSArray *nonConsumables = [[self storeKitItems] objectForKey:@"Non-Consumables"];
+  NSArray *nonConsumables = [[[self storeKitItems] objectForKey:@"Non-Consumables"] allKeys];
   NSArray *subscriptions = [[[self storeKitItems] objectForKey:@"Subscriptions"] allKeys];
-  
-  [productsArray addObjectsFromArray:consumables];
-  [productsArray addObjectsFromArray:consumableNames];
-  [productsArray addObjectsFromArray:nonConsumables];
-  [productsArray addObjectsFromArray:subscriptions];
-  
+
+    [productsArray addObjectsFromArray:consumables];
+    [productsArray addObjectsFromArray:consumableNames];
+    [productsArray addObjectsFromArray:nonConsumables];
+    [productsArray addObjectsFromArray:subscriptions];
+
   return productsArray;
 }
 
