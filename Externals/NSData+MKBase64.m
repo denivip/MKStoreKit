@@ -23,6 +23,12 @@
 
 #import "NSData+MKBase64.h"
 
+// currently commented out due ShareKit Pod
+// ShareKit is really wtf-monolitic
+// It will be taken from ShareKit/Evernote
+// other ways: patch .a files, try frameworks (sharekit+extension has REAL problems in this case)
+#ifndef TOGETHER_BUNDLE_ID
+
 //
 // Mapping from 6 bit pattern to ASCII character.
 //
@@ -310,3 +316,4 @@ char *NewBase64Encode(
 }
 
 @end
+#endif
