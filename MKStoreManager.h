@@ -56,7 +56,7 @@
 
 // this is a class method, since it doesn't require the store manager to be initialized prior to calling
 + (BOOL) isFeaturePurchased:(NSString*) featureId;
-
+@property (nonatomic, assign) BOOL isRestoredPurchasesShouldBeIgnored;
 @property (nonatomic, strong) NSMutableArray *purchasableObjects;
 @property (nonatomic, strong) NSMutableDictionary *subscriptionProducts;
 #ifdef __IPHONE_6_0
